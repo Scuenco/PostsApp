@@ -6,7 +6,7 @@ const postRoutes = require('./routes/posts');
 const Post = require('./models/post');
 
 // The default DB name is 'test', can be overriden.
-mongoose.connect("mongodb+srv://sherry:%5FXb5%5FAs%2Dr4higW@cluster0-fcivp.mongodb.net/node-angular?retryWrites=true&w=majority", { useNewUrlParser: true })
+mongoose.connect("ConnectionString", { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to Database!');
   })
