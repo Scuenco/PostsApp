@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const postRoutes = require('./routes/posts');
+const Post = require('./models/post');
 
 // The default DB name is 'test', can be overriden.
 mongoose.connect("mongodb+srv://sherry:%5FXb5%5FAs%2Dr4higW@cluster0-fcivp.mongodb.net/node-angular?retryWrites=true&w=majority", { useNewUrlParser: true })
@@ -31,14 +32,35 @@ app.use((req, res, next) => {
 
 // To make express aware of postRoutes
 // All API posts that starts with '/api/posts' will be forwarded into the postRoutes routing setup
-app.use('/api/posts', postRoutes);
-/*
+//app.use('/api/posts', postRoutes);
+
 app.post("/api/posts", (req, res, next) => {
-  const post = req.body;
-  console.log(post);
-  res.status(201).json({//201: a new resource was created
-    message: 'Post added successfully'
+  const post = new Post ({
+    title: req.body.title,
+    content: req.body.content
+  });
+  post.save().then(createdPost => {
+    res.status(201).json({//201: a new resource was created
+      message: 'Post added successfully',
+      postId: createdPost._id
+    });
   });
 });
-*/
+
+app.get("/api/posts", (req, res, next) => {
+  Post.find().then(documents => {
+    res.status(200).json({
+      message: "Posts fetched successfully!",
+      posts: documents
+    });
+  });
+});
+
+app.delete("/api/posts/:id", (req, res, next) => {
+  Post.deleteOne({_id: req.params.id}).then(result => {
+    console.log(result);
+    res.status(200).json({ message: 'Post deleted' });
+  });
+});
+
 module.exports = app;
