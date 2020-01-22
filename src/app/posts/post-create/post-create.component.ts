@@ -20,19 +20,7 @@ export class PostCreateComponent implements OnInit {
   private postId: string;
 
   constructor(public postsService: PostsService, public route: ActivatedRoute ) {}
-/*
-  // @Output decorator turns it into an event that can be available outside
-  @Output() postCreated = new EventEmitter<Post>();
 
-  onAddPost() {
-    // Store the entered content in a new JS object (post)
-    const post: Post = {
-      title: this.enteredTitle,
-      content : this.enteredContent
-    };
-    this.postCreated.emit(post);
-  }
-*/
 ngOnInit() {
   this.form = new FormGroup({
     title: new FormControl(null, {
