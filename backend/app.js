@@ -47,12 +47,32 @@ app.post("/api/posts", (req, res, next) => {
   });
 });
 
+app.put("/api/posts/:id", (req, res, next) => {
+  const post = new Post ({
+    _id: req.body.id,
+    title: req.body.title,
+    content: req.body.content
+  });
+  Post.updateOne({_id: req.params.id}, post).then(result => {
+    res.status(200).json({message: 'Update successful!'});
+  });
+});
+
 app.get("/api/posts", (req, res, next) => {
   Post.find().then(documents => {
     res.status(200).json({
       message: "Posts fetched successfully!",
       posts: documents
     });
+  });
+});
+app.get("/api/posts/:id", (req, res, next) => {
+  Post.findById(res.params.id).then(post => {
+    if (post) {
+      res.status(200).json(post);
+    }else {
+      res.status(404).json({message: 'Post not found.'});
+    }
   });
 });
 
