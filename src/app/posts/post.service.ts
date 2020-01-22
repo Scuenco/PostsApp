@@ -42,7 +42,6 @@ export class PostsService {
     // return {...this.posts.find( p => p.id === id)};
 
     // we will no longer get post info from the front end but instead get it from the server.
-    const responseData = this.httpClient.get<{_id: string, title: string, content: string}>('http://localhost:3000/api/posts/' + id);
     return this.httpClient.get<{_id: string, title: string, content: string}>('http://localhost:3000/api/posts/' + id);
   }
 

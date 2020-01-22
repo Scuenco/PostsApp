@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { PostsService } from '../post.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
 
@@ -48,6 +48,9 @@ ngOnInit() {
     if (paramMap.has('postId')) {
       this.mode = 'edit';
       this.postId = paramMap.get('postId');
+      this.postsService.getPost(this.postId).subscribe(postData => {
+        this.post = {id: postData._id, title: postData.title, content: postData.content};
+      });
       this.isLoading = true;
 
       // retrieve that record for editing
@@ -88,7 +91,7 @@ ngOnInit() {
     reader.readAsDataURL(file);
   }
 
-  onSavePost() {
+  onSavePost(form: NgForm) {
     if (this.form.invalid) {
       return;
     }
