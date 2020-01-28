@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -5,7 +6,7 @@ const mongoose = require('mongoose');
 const postRoutes = require('./routes/posts');
 
 // The default DB name is 'test', can be overriden.
-mongoose.connect("ConnectionString", { useNewUrlParser: true })
+mongoose.connect("Connectionstring", { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to Database!');
   })
@@ -19,6 +20,12 @@ app.use(bodyParser.json());
 // To parse url encoded data.
 // Extended : false, to only support default features in the url encoding.
 app.use(bodyParser.urlencoded({extended: false}));
+
+// any requests targeting '/images' will be allowed to continue
+// and fetch their files from there.
+// path.join: makes sure that requests going to 'images' are
+// forwarded to 'backend/images'.
+app.use("/images", express.static(path.join('backend/images')));
 
 // Setup CORS
 app.use((req, res, next) => {
