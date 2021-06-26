@@ -47,7 +47,8 @@ ngOnInit() {
           id: postData._id,
           title: postData.title,
           content: postData.content,
-          imagePath: postData.imagePath
+          imagePath: postData.imagePath,
+          creator: postData.creator
         };
         // Set the value of the form Group
         this.form.setValue({

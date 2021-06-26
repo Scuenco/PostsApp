@@ -27,14 +27,17 @@ export class PostsService {
               title: mappedData.title,
               content: mappedData.content,
               id: mappedData._id,
-              imagePath: mappedData.imagePath
+              imagePath: mappedData.imagePath,
+              creator: mappedData.creator
             };
           }),
           maxPosts: postData.maxPosts};
       } ))
-      .subscribe((postsData) => {
-        this.posts = postsData.posts;
-        this.postsUpdated.next({posts: [...this.posts], postCount: postsData.maxPosts });
+      .subscribe((transformedPostData) => {
+        this.posts = transformedPostData.posts;
+        this.postsUpdated.next({
+          posts: [...this.posts],
+          postCount: transformedPostData.maxPosts });
       });
   }
   // Returns an object which we can now listen to but not emit
@@ -43,8 +46,11 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.httpClient.get<{_id: string, title: string, content: string,
-      imagePath: string}> ('http://localhost:3000/api/posts/' + id);
+    return this.httpClient.get<{_id: string, title: string,
+      content: string,
+      imagePath: string,
+      creator: string
+    }> ('http://localhost:3000/api/posts/' + id);
   }
 
   addPost(title: string, content: string, image: File ) {
@@ -61,7 +67,6 @@ export class PostsService {
       this.router.navigate(['/']);
     });
   }
-
   updatePost(id: string, title: string, content: string, image: File | string) {
     // const post: Post = {id, title, content, imagePath: null};
     let postData: Post | FormData;
@@ -74,7 +79,10 @@ export class PostsService {
       postData.append('image', image, title)
     } else {
       // send normal JSON data
-      postData = { id, title, content, imagePath: image };
+      postData = { id, title, content,
+        imagePath: image,
+        creator: null
+       };
     }
     this.httpClient.put('http://localhost:3000/api/posts/' + id, postData )
     .subscribe((responseData) => {

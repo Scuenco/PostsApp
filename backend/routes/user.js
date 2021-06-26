@@ -56,7 +56,8 @@ User.findOne({email: req.body.email})
     // return token here
     res.status(200).json({
       token: token,
-      expiresIn: 3600
+      expiresIn: 3600,
+      userId: foundUser._id
     });
   })
   .catch(err => {
